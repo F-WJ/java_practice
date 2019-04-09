@@ -1,1 +1,11 @@
-# java_practice
+java_practice
+==
+|日期|题目名字|
+|:---:|:---:|
+|day1|mblock练习1|
+|day2|mblock练习2|
+|day3|环境配置|
+|day4|变量和运算符|
+|day5|选择语句和循环语句|
+|day6|数组|
+|day7|方法|
