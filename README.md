@@ -9,3 +9,4 @@ java_practice
 |day5|选择语句和循环语句|
 |day6|数组|
 |day7|方法|
+|day8|数组高级|
