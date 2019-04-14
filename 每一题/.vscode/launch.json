@@ -2,6 +2,30 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - test1",
+            "request": "launch",
+            "mainClass": "test1"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - ForTest",
+            "request": "launch",
+            "mainClass": "ForTest"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Test",
+            "request": "launch",
+            "mainClass": "Test"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Dog",
+            "request": "launch",
+            "mainClass": "Dog"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - LogicTest",
             "request": "launch",
             "mainClass": "LogicTest"
