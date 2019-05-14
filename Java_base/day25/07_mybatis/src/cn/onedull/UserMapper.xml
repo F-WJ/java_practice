@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 设置命名空间 -->
+<mapper namespace="cn.onedull.UserMapper">
+	<!-- 设置保存操作 -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+		insert into user(name, salary, hiredate) values(#{name}, #{salary}, #{hiredate})
+	</insert>
+	
+	<!-- 删除操作 -->
+	<insert id="delete">
+		delete from user where id = #{id};
+	</insert>
+	
+	<!-- 修改操作 -->
+	<insert id="update">
+		update user set name = #{name}, salary = #{salary}, hiredate = #{hiredate} where id = #{id} 
+	</insert>
+	
+	<!-- 查询单条信息 -->
+	<select id="get" resultType="cn.onedull.test.User">
+		select * from user where id = #{id}
+	</select>
+	
+	<!-- 查询全部信息 -->
+	<select id="getall" resultType="cn.onedull.test.User">
+		select * from user
+	</select>
+</mapper>

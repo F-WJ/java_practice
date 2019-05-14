@@ -26,3 +26,4 @@ Java_base
 |day22|JDBC|
 |day23|JDBC_DAO|
 |day24|事务_连接池|
+|day25|mybatis|
