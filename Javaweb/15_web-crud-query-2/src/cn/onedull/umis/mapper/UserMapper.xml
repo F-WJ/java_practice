@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="cn.onedull.umis.mapper.UserMapper">
+  	<!-- 增加  -->
+  	<insert id="save">
+  		insert into user(name, salary, hiredate) values(#{name}, #{salary}, #{hiredate})
+  	</insert>
+  	
+  	<!-- 删除  -->
+  	<delete id="delete">
+  		delete from user where id=#{id}
+  	</delete>
+  	
+  	<!-- 改 -->
+  	<update id="update">
+  		update user set name=#{name}, salary=#{salary}, hiredate=#{hiredate} where id=#{id}
+  	</update>
+  	
+  	<select id="get" resultType="cn.onedull.umis.domain.User">
+  		select * from user where id=#{id}
+  	</select>
+  	
+  	<!-- 查 -->
+  	<select id="queryForList" resultType="cn.onedull.umis.domain.User">
+  		select * from user 
+  		<where>
+  			<if test="userName != null and userName != '' ">
+  				name like concat("%", #{userName}, "%")	
+  			</if>
+  			<if test="minSalary != null ">
+  				and salary &gt;= #{minSalary}
+  			</if>
+  			<if test="maxSalary != null">
+  				and salary &lt;= #{maxSalary}
+  			</if>
+  		</where>
+  	
+  		limit #{beginIndex}, #{pageSize}
+  	
+  	</select>
+  	
+  	<!-- 查总条数 -->
+  	<select id="queryForCount" resultType="int">
+  		select count(*) from user
+  		<where>
+  			<if test="userName != null and userName != '' ">
+  				name like concat("%", #{userName}, "%")	
+  			</if>
+  			<if test="minSalary != null ">
+  				and salary &gt;= #{minSalary}
+  			</if>
+  			<if test="maxSalary != null">
+  				and salary &lt;= #{maxSalary}
+  			</if>
+  		</where>
+  	</select>
+  </mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="cn.onedull.umis.mapper.UserMapper">
+  		<insert id="save">
+  			insert into user(name, salary, hiredate) values(#{name}, #{salary}, #{hiredate})
+  		</insert>
+  		
+  		<delete id="delete">
+  			delete from user where id=#{id}
+  		</delete>
+  		
+  		<update id="update">
+  			update user set name=#{name}, salary=#{salary}, hiredate=#{hiredate} where id=#{id}
+  		</update>
+  		
+  		<select id="get" resultType="cn.onedull.umis.domain.User">
+  			select * from user where id=#{id}
+  		</select>
+  		
+  		<select id="getall" resultType="cn.onedull.umis.domain.User">
+  			select * from user
+  		</select>
+  		
+  		
+  </mapper>

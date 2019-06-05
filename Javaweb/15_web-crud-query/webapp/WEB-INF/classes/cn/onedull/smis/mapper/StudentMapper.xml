@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="cn.onedull.smis.mapper.StudentMapper">
+  	<!-- 保存  -->
+  	<insert id="save">
+  		insert into student(name, age, clazz) values(#{name}, #{age}, #{clazz})
+  	</insert>
+  	<!-- 删除  -->
+  	<delete id="delete">
+  		delete from student where id=#{id}
+  	</delete>
+  	<!-- 修改  -->
+  	<update id="update">
+  		update student set name=#{name}, age=#{age}, clazz=#{clazz} where id=#{id}
+  	</update>
+  	<!-- 获取数据 -->
+	<select id="get" resultType="cn.onedull.smis.domain.Student">
+		select * from student where id=#{id} 
+	</select>
+  	<!-- 每页数据信息 -->
+  	<select id="queryForList" resultType="cn.onedull.smis.domain.Student">
+  		select * from student 
+  		<where>
+  			<if test="studentName != null and studentName != '' ">
+  				name like  concat("%", #{studentName}, "%")
+  			</if>
+  			<if test="minAge != null">
+  				and age &gt;= #{minAge}
+  			</if>
+  			<if test="maxAge != null">
+  				and age &lt;= #{maxAge}
+  			</if>
+  		</where>
+  			
+  		limit #{beginIndex}, #{pageSize}
+  	</select>
+  	<!-- 总数据 -->
+  	<select id="queryForCount" resultType="int">
+  		select count(*) from student
+  		  		<where>
+  			<if test="studentName != null and studentName != '' ">
+  				name like concat("%", #{studentName}, "%")
+  			</if>
+  			<if test="minAge != null">
+  				and age &gt;= #{minAge}
+  			</if>
+  			<if test="maxAge != null">
+  				and age &lt;= #{maxAge}
+  			</if>
+  		</where>
+  	</select>
+  </mapper>

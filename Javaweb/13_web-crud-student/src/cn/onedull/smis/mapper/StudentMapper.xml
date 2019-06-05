@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+  <mapper namespace="cn.onedull.smis.mapper.StudentMapper">
+  	<insert id="save">
+  		insert into  student(name, age, clazz) values(#{name}, #{age}, #{clazz})
+  	</insert>
+  	
+  	<delete id="delete">
+  		delete from student where id = #{id}
+  	</delete>
+  	
+  	<update id="update">
+  		update student set name=#{name}, age=#{age}, clazz=#{clazz} where id=#{id}
+  	</update>
+  	
+  	<select id="get" resultType="cn.onedull.smis.domain.Student">
+  		select * from student where id = #{id}
+  	</select>
+  	
+  	<select id="getall" resultType="cn.onedull.smis.domain.Student">
+  		select * from student
+  	</select>
+  	
+  	
+
+  	
+  	
+  	
+  	
+  </mapper>
