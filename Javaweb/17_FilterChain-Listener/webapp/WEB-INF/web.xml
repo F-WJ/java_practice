@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"
+  >
+  	<!-- 编码配置 -->
+  	<filter>
+  		<filter-name>CharacterEncodingFilter</filter-name>
+  		<filter-class>cn.onedull._02_character.CharacterEncodingFilter</filter-class>
+  		<!-- 初始化配置 -->
+  		<init-param>
+  			<param-name>encoding</param-name>
+  			<param-value>utf-8</param-value>
+  		</init-param>
+  	
+  	</filter>
+  	<filter-mapping>
+  		<filter-name>CharacterEncodingFilter</filter-name>
+  		<url-pattern>/login</url-pattern>
+  	</filter-mapping>
+  
+  
+  	<!-- 项目位置 -->
+	<filter>
+		<filter-name>HelloFilter</filter-name>
+		<filter-class>cn.onedull._01_filter.HelloFilter</filter-class>
+		<!-- 初始化操作所需的值 -->
+		<init-param>
+			<param-name>decode</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	
+	<!-- url路径 -->
+	<filter-mapping>
+		<filter-name>HelloFilter</filter-name>
+		<url-pattern>/hello</url-pattern>
+	
+	<!-- 配置某些操作经过过滤 -->
+	<!-- requst是默认设置 -->
+	<dispatcher>REQUEST</dispatcher>
+	<!-- 请求转发 -->
+	<dispatcher>FORWARD</dispatcher>
+	<!-- 错误页面 -->
+	<dispatcher>ERROR</dispatcher>
+	
+	
+	</filter-mapping>
+	
+		
+	<!-- 错误跳转 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/500.jsp</location>
+	</error-page>
+	
+	
+	<!-- 演示多个过滤器时的优先级问题（由filter-mapping标签来控制）退出时是后面先退出 -->
+	<filter>
+		<filter-name>HelloFilter1</filter-name>
+		<filter-class>cn.onedull._01_filter.HelloFilter1</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HelloFilter3</filter-name>
+		<url-pattern>/hello</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>HelloFilter2</filter-name>
+		<filter-class>cn.onedull._01_filter.HelloFilter2</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HelloFilter2</filter-name>
+		<url-pattern>/hello</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>HelloFilter3</filter-name>
+		<filter-class>cn.onedull._01_filter.HelloFilter3</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HelloFilter1</filter-name>
+		<url-pattern>/hello</url-pattern>
+	</filter-mapping>
+</web-app>

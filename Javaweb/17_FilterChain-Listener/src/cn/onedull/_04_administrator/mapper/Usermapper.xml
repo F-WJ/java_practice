@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="cn.onedull._04_administrator.mapper.UserMapper">
+  	<!-- 保存 -->
+  	<insert id="save">
+  		INSERT into user2(name, passsword)
+  		VALUES(#{name}, #{password})
+  		
+  	</insert>
+ 	
+ 	<!-- 检查是否存在用户 -->
+  	<select id="get" resultType="cn.onedull._04_administrator.domain.User">
+  	select * from user2 where name=#{name}
+  	</select>
+  	
+  		
+  </mapper>
