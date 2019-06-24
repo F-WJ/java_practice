@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.onedull.mybatistest.mapper.TeacherMapper">
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO teacher(name) VALUES(#{name});
+	</insert>
+	
+	<!-- 查询指定老师 -->
+	<select id="getTeachersByStudent" resultType="cn.onedull.mybatistest.domain.Teacher">
+		SELECT * FROM teacher t
+		JOIN teacher_student  ON teacher_student.teacher_id = t.id
+		HAVING student_id = #{id};
+	</select>
+</mapper>

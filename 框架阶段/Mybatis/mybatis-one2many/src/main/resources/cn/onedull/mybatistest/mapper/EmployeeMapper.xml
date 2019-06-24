@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.onedull.mybatistest.mapper.EmployeeMapper">
+	<insert id="save" keyProperty="id" useGeneratedKeys="true">
+		INSERT INTO t_employee(name, deptId) VALUES(#{name}, #{deptId});
+	</insert>
+	
+	
+	<resultMap id="baseResultMap" type="cn.onedull.mybatistest.domain.Employee">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		
+		<association javaType="cn.onedull.mybatistest.domain.Department" property="dept" column="deptId" select="cn.onedull.mybatistest.mapper.DepartmentMapper.get"></association>
+	
+	</resultMap>
+	
+	<!-- 第一种方式JOIN -->
+	<resultMap type="cn.onedull.mybatistest.domain.Employee" id="baseResultMap2">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="d_id" property="dept.id"/>
+		<result column="d_name" property="dept.name"/>
+	</resultMap>
+	
+	<!-- 查询全部JOIN -->
+	<select id="getAll" resultMap="baseResultMap2">
+		SELECT e.id, e.name, d.id AS d_id, d.name AS d_name
+		FROM t_employee e
+		LEFT JOIN department d ON e.deptId = d.id;
+	</select>
+	
+	<!-- 查询该员工的所在部门 -->
+	<select id="get" resultMap="baseResultMap">
+		SELECT * FROM t_employee WHERE id = #{id};
+	</select>
+	
+	<!-- 通过部门id查询该员工 -->
+	<select id="queryByDepartment" resultType="cn.onedull.mybatistest.domain.Employee">
+		SELECT * FROM t_employee WHERE deptId = #{deptId};
+	</select>
+</mapper>
