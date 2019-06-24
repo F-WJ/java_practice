@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!--IoC注解解析器  -->
+	<context:component-scan base-package="cn.wolfcode.springmvc.web.controller"></context:component-scan>
+	<!-- DI注解解析器 -->
+	<context:annotation-config />
+	
+	<!-- mvc注解解析器 -->
+	<mvc:annotation-driven />
+	
+	<!-- 访问静态资源设置（当前端控制器映射配置为/*时,当访问jsp的时候会显示所有代码） -->
+	<!-- 方式一 -->
+	<!-- <mvc:default-servlet-handler/> -->
+	<!-- 方式二 (location指webapp路径下的static的文件，而mapper指请求的路径) -->
+	<mvc:resources location="/static/" mapping="/static/**" />
+
+	<!-- 配置视图解析器后缀和前缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 前缀 -->
+		<property name="prefix" value="/WEB-INF/resp/"></property>
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- 上传操作  使用spring官方自带-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1048576"></property>
+	</bean>
+	
+</beans>

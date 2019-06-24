@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	
+	
+	<!-- 解析AOP注解 -->
+	<context:component-scan base-package="cn.onedull.spring"></context:component-scan>
+	<aop:aspectj-autoproxy />
+	
+	<bean class="cn.onedull.spring.service.impl.EmployeeServiceimpl"></bean>
+	<!-- 配置AOP -->
+<!-- 	<bean id="tm" class="cn.onedull.spring.tx.TransactionManager"></bean> -->
+	<!-- 修改AOP默认使用的JDK框架，修改为CGLIB 修改为proxy-target-class="true"可以-->
+<!-- 	<aop:config >
+		切面
+		<aop:aspect ref="tm">
+			切入点
+			<aop:pointcut expression='execution(* cn.onedull.spring.service.impl.EmployeeServiceimpl.*(..))' id="tmPoint"/>
+			开始点增强
+			<aop:before method="begin" pointcut-ref="tmPoint"/>
+			提交
+			<aop:after-returning method="commit" pointcut-ref="tmPoint"/>
+			处理异常
+			<aop:after-throwing method="rollback" pointcut-ref="tmPoint" throwing="tw"/>
+			环绕增强
+			<aop:around method="aroundDemo" pointcut-ref="tmPoint"/>
+		
+		</aop:aspect>
+		
+		
+	</aop:config> -->
+
+</beans>

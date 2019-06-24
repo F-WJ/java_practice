@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	
+	<!-- 模拟代理 -->
+	<!-- 创建employeeservice 房东 -->
+	<!-- <bean id="EmployeeService" class="cn.onedull.spring.service.impl.EmployeeServiceimpl">
+	</bean> -->
+	
+	<!-- proxy 中介（代理） -->
+		<!-- 半成品 还是能通过id找到 -->
+<!-- 	<bean id="EmployeeServiceProxy" class="cn.onedull.spring.service.impl.EmployeeServiceProxy">
+		<property name="target" ref="EmployeeService"></property>
+		<property name="transactionManager" ref="TransactionManager"></property> -->
+	
+	<!--  -->
+	<bean id="EmployeeServiceProxy" class="cn.onedull.spring.service.impl.EmployeeServiceProxy">
+		<property name="target">
+			<bean class="cn.onedull.spring.service.impl.EmployeeServiceimpl"></bean>
+		</property>
+		<property name="transactionManager" ref="TransactionManager"></property>
+	
+	</bean>
+	
+	
+	
+	
+	
+	<!-- 事务 -->
+	<bean id="TransactionManager" class="cn.onedull.spring.tx.TransactionManager"></bean>
+</beans>
