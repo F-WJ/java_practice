@@ -16,7 +16,7 @@ for循环一共循环7次
 但是循环次数已经结束
 因此此时i判定循环了7次，j循环了7-3次，k循环了7-3-3次
 值分别为7、4、1
-答案选：B
+
  */
 public class test {
 	public static void main(String[] args) {

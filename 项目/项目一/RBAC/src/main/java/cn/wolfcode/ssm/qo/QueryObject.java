@@ -1,0 +1,19 @@
+package cn.wolfcode.ssm.qo;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class QueryObject {
+	//
+	private int currentPage = 1;
+	
+	private int pageSize = 3;
+	
+	public int getBeginIndex(){
+		return (currentPage - 1) * pageSize;
+	}
+}
