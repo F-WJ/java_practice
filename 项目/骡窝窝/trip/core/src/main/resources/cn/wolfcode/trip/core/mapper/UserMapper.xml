@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.trip.core.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="cn.wolfcode.trip.core.domain.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="nickName" property="nickName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="place" property="place" jdbcType="VARCHAR" />
+    <result column="headImgUrl" property="headImgUrl" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="coverImgUrl" property="coverImgUrl" jdbcType="VARCHAR" />
+    <result column="sign" property="sign" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.wolfcode.trip.core.domain.User" useGeneratedKeys="true" keyProperty="id" >
+    insert into user (email, nickName, password, 
+      place, headImgUrl, gender, 
+      coverImgUrl, sign, phone
+      )
+    values (#{email,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{place,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, 
+      #{coverImgUrl,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.trip.core.domain.User" >
+    update user
+    set
+      nickName = #{nickName,jdbcType=VARCHAR},
+      place = #{place,jdbcType=VARCHAR},
+      headImgUrl = #{headImgUrl,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      coverImgUrl = #{coverImgUrl,jdbcType=VARCHAR},
+      sign = #{sign,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, email, nickName, place, headImgUrl, gender, coverImgUrl, sign,
+    phone
+    from user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, email, nickName, password, place, headImgUrl, gender, coverImgUrl, sign, 
+    phone
+    from user
+  </select>
+    <select id="selectByPhone" resultType="cn.wolfcode.trip.core.domain.User">
+        select id, email, nickName, password, place, headImgUrl, gender, coverImgUrl, sign,
+        phone
+        from user
+        where phone = #{phone}
+    </select>
+    <select id="selectByAccountAndPassword" resultType="cn.wolfcode.trip.core.domain.User">
+        select id, email, nickName, place, headImgUrl, gender, coverImgUrl, sign,
+        phone
+        from user
+        where (phone = #{account} or email = #{account}) and password = #{password}
+
+    </select>
+  <select id="selectByUserId" resultType="cn.wolfcode.trip.core.domain.User">
+        select id, email, nickName, place, headImgUrl, gender, coverImgUrl, sign,
+        phone
+        from user
+        where id = #{id}
+  </select>
+</mapper>

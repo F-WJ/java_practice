@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.trip.core.mapper.RegionMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.trip.core.domain.Region">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="parent_id" property="parentId" />
+    <result column="state" property="state" />
+    <result column="parent_name" property="parentName" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey">
+    delete from region
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    insert into region (name, parent_id, state)
+    values (#{name}, #{parentId}, #{state})
+  </insert>
+  <update id="updateByPrimaryKey">
+    update region
+    set name = #{name},
+      parent_id = #{parentId},
+      state = #{state}
+    where id = #{id}
+  </update>
+  <update id="updateState">
+    update region
+    set state = #{state}
+    where id = #{id}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select id, name, parent_id, state
+    from region
+    where id = #{id}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, parent_id, state
+    from region
+  </select>
+    <select id="selectByParantId" resultMap="BaseResultMap">
+        select son.id, son.name, son.parent_id, son.state, parent.name parent_name
+        from region son
+        <choose>
+          <when test="parentId != null">
+            LEFT JOIN region parent ON son.parent_id = parent.id
+            where son.parent_id = #{parentId}
+          </when>
+          <otherwise>
+            LEFT JOIN region parent ON son.parent_id = parent.id
+            where son.parent_id is null
+          </otherwise>
+        </choose>
+
+
+    </select>
+</mapper>

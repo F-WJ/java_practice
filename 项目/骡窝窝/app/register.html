@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+      <title>注册页面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/js/bootstrap-4.1.1-dist/css/bootstrap.min.css">
+    <script src="/js/jquery/jquery.min.js"></script>
+    <script src="/js/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/font/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <script src="/js/plugins/form/jquery.form.js"></script>
+    <link rel="stylesheet" href="/js/plugins/dialog2/dialog.css">
+    <script src="/js/plugins/dialog2/dialog.min.js"></script>
+    <script src="/js/common.js"></script>
+
+    <script>
+
+        //验证码相关设置
+        $(function () {
+            $("#sendVerifyCode").click(function () {
+                var btn = $(this);
+                var phone = $("input[name=phone]").val();
+                $(this).prop('disabled', true);
+                //发送请求(跨域访问解决，允许访问，但不能获取后台传递的数据， 配置mvc配置cors)
+                $.post(baseUrl + '/verifyCode', {phone: phone}, function (data) {
+                    if(data.success){
+                        var num = 6;
+                        window.setInterval(function () {
+                            if(num > 1){
+                                num --;
+                                btn.html(num + "秒后重发");
+
+                            }else{
+                                $(btn).prop('disabled', false);
+                                btn.html("发送验证码");
+                                window.clearInterval(interval);
+                            }
+
+
+                        }, 1000)
+                    }else{
+                        $(btn).prop('disabled', false);
+                        alert(data.msg);
+                    }
+                });
+
+            })
+
+            //注册模块
+            $("#registerForm").ajaxForm({
+                url:baseUrl + "/users",
+                method:'post',
+                success:function (data) {
+                    if(data.success){
+                    alert("注册成功");
+
+                    }else{
+                        alert(data.msg);
+                    }
+                }
+
+            })
+
+        })
+    </script>
+
+
+</head>
+<body>
+
+<div class="container">
+    <h5>注册</h5>
+    <div class="card card-container ">
+        <i id="profile-img" class="fa fa-user-plus fa-5x profile-img" aria-hidden="true"></i>
+        <form class="form-signin" id="registerForm" method="post">
+            <input type="text" name="nickName" class="form-control badge-pill" placeholder="昵称">
+            <input type="text" name="phone" class="form-control badge-pill" placeholder="手机号">
+            <div style="display: flex;justify-content: center;align-items: center;margin: -10px auto">
+                <div style="flex: 3;">
+                    <input type="text" name="verifyCode" class="form-control badge-pill" placeholder="手机验证码">
+                </div>
+                <div style="flex: 1;padding-left: 10px;">
+                    <button class="btn btn-default btn-sm" type="button" id="sendVerifyCode">发送验证码</button>
+                </div>
+            </div>
+            <input id="password" type="password" name="password" class="form-control badge-pill" placeholder="密码">
+            <input type="password" name="confirmPwd" class="form-control badge-pill" placeholder="确认密码">
+            <button class="btn btn-lg badge-pill" type="submit">注册</button>
+        </form>
+    </div>
+    <a href="login.html" class="registerLink">
+        已经有账号了？点击此处登录
+    </a>
+</div>
+
+</body>
+</html>
