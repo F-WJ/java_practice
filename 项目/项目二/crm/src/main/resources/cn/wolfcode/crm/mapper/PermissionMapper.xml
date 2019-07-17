@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.crm.mapper.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="cn.wolfcode.crm.domain.Permission" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="expression" property="expression" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.wolfcode.crm.domain.Permission" useGeneratedKeys="true" keyProperty="id" >
+    insert into permission (name, expression)
+    values (#{name,jdbcType=VARCHAR}, #{expression,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.crm.domain.Permission" >
+    update permission
+    set name = #{name,jdbcType=VARCHAR},
+      expression = #{expression,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, expression
+    from permission
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, expression
+    from permission
+  </select>
+
+
+
+
+  <select id="queryForList" resultType="cn.wolfcode.crm.domain.Permission">
+        select  id, name, expression
+        from permission
+
+
+  </select>
+
+  <select id="queryForCount" resultType="java.lang.Integer">
+        select count(*)
+        from permission
+
+  </select>
+    <select id="queryByEmployeeId" resultType="java.lang.String">
+        SELECT DISTINCT expression FROM employee LEFT
+        JOIN employee_relate_role ON employee.id = employee_relate_role.employeeId
+        JOIN role_permission ON role_permission.roleId = employee_relate_role.roleId
+        JOIN permission ON permission.id = role_permission.permissionId where employeeId = #{id}
+    </select>
+    <select id="selectAllExpression" resultType="java.lang.String">
+      select expression from permission
+    </select>
+</mapper>

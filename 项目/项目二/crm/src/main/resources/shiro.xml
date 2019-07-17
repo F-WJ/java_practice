@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cotext="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <cotext:component-scan base-package="cn.wolfcode.crm.shiro" />
+
+<!--    shiro过滤器-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" />
+        <property name="loginUrl" value="/login.html" />
+
+        <property name="filterChainDefinitions" >
+            <value>
+                /js/**=anon
+                /css/**=anon
+                /logout.do=logout
+                /**=authc
+
+            </value>
+        </property>
+
+        <property name="filters" >
+            <map>
+                <!--                设置当前使用的认证过滤器-->
+                <entry key="authc" value-ref="crmFormAuthenticationFilter" />
+            </map>
+        </property>
+    </bean>
+
+<!--    绑定指定安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="crmRealm" />
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+<!--    权限注解扫描器-->
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+
+
+    <!-- 缓存管理器 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!-- 设置配置文件 -->
+        <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>
+    </bean>
+
+
+
+
+</beans>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.crm.mapper.EmployeeMapper">
+<!--  <resultMap id="BaseResultMap" type="cn.wolfcode.crm.domain.Employee">-->
+<!--    <id column="id" jdbcType="BIGINT" property="id" />-->
+<!--    <result column="password" jdbcType="VARCHAR" property="password" />-->
+<!--    <result column="email" jdbcType="VARCHAR" property="email" />-->
+<!--    <result column="age" jdbcType="INTEGER" property="age" />-->
+<!--    <result column="admin" jdbcType="BIT" property="admin" />-->
+<!--    <result column="deptId" jdbcType="BIGINT" property="deptId" />-->
+<!--    <result column="name" jdbcType="VARCHAR" property="name" />-->
+<!--  </resultMap>-->
+<!--  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
+<!--    delete from employee-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </delete>-->
+<!--  <insert id="insert" keyProperty="id" parameterType="cn.wolfcode.crm.domain.Employee" useGeneratedKeys="true">-->
+<!--    insert into employee (password, email, age, -->
+<!--      admin, deptId, name)-->
+<!--    values (#{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, -->
+<!--      #{admin,jdbcType=BIT}, #{deptId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR})-->
+<!--  </insert>-->
+<!--  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.crm.domain.Employee">-->
+<!--    update employee-->
+<!--    set password = #{password,jdbcType=VARCHAR},-->
+<!--      email = #{email,jdbcType=VARCHAR},-->
+<!--      age = #{age,jdbcType=INTEGER},-->
+<!--      admin = #{admin,jdbcType=BIT},-->
+<!--      deptId = #{deptId,jdbcType=BIGINT},-->
+<!--      name = #{name,jdbcType=VARCHAR}-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </update>-->
+<!--  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+<!--    select id, password, email, age, admin, deptId, name-->
+<!--    from employee-->
+<!--    where id = #{id,jdbcType=BIGINT}-->
+<!--  </select>-->
+<!--  <select id="selectAll" resultMap="BaseResultMap">-->
+<!--    select id, password, email, age, admin, deptId, name-->
+<!--    from employee-->
+<!--  </select>-->
+
+  <resultMap id="BaseResultMap" type="cn.wolfcode.crm.domain.Employee">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="admin" jdbcType="BIT" property="admin" />
+    <result column="deptId" jdbcType="BIGINT" property="deptId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+
+    <association columnPrefix="d_" javaType="Department" property="dept">
+      <result column="id" property="id" />
+      <result column="sn" property="sn" />
+      <result column="name" property="name" />
+    </association>
+    </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from employee
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="delrelation">
+        delete from  employee_relate_role where employeeId = #{id}
+  </delete>
+    <delete id="batchdelrelation">
+        delete from employee_relate_role where employeeId in
+        <foreach collection="array" open="(" close=")" separator="," item="id" >
+          #{id}
+        </foreach>
+    </delete>
+  <delete id="batchDelate">
+        delete from employee where id in
+        <foreach collection="array" open="(" close=")" separator="," item="id" >
+          #{id}
+        </foreach>
+
+  </delete>
+
+
+  <insert id="insert" keyProperty="id" parameterType="cn.wolfcode.crm.domain.Employee" useGeneratedKeys="true">
+    insert into employee (password, email, age, admin, deptId, name)
+    values (#{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER},
+      #{admin,jdbcType=BIT}, #{deptId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR})
+  </insert>
+
+
+  <insert id="relation">
+    insert into employee_relate_role(employeeId, roleId)
+    value(#{employeeId}, #{roleId})
+  </insert>
+
+
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.crm.domain.Employee">
+    update employee
+    set
+    <if test="password != null and password != ''">
+    password = #{password,jdbcType=VARCHAR},
+    </if>
+    <if test="email != null and email != ''">
+      email = #{email,jdbcType=VARCHAR},
+    </if>
+    <if test="age != null and age != ''">
+      age = #{age,jdbcType=INTEGER},
+    </if>
+    <if test="admin != null and admin != ''">
+      admin = #{admin,jdbcType=BIT},
+    </if>
+    <if test="deptId != null and deptId != ''">
+      deptId = #{deptId,jdbcType=BIGINT},
+    </if>
+    <if test="name != null and name != ''">
+      name = #{name,jdbcType=VARCHAR}
+    </if>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from employee
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from employee
+  </select>
+    <select id="login" resultType="cn.wolfcode.crm.domain.Employee">
+      select * from employee where password = #{password} and name = #{username}
+    </select>
+
+
+    <sql id="WHERE_SQL">
+        <where>
+          <if test="keyword != null and keyword != ''">
+            and (e.name like concat('%', #{keyword}, '%') or email like concat('%', #{keyword}, '%'))
+          </if>
+          <if test="deptId != -1 and deptId != null">
+            and deptId = #{deptId}
+          </if>
+        </where>
+    </sql>
+
+
+    <select id="queryForList" resultMap="BaseResultMap">
+        SELECT e.id, e.password, e.name, e.email, e.age, e.deptId,  d.id as d_id, d.sn as d_sn, d.name as d_name
+        FROM employee e
+        LEFT JOIN department d ON e.deptId = d.sn
+        <include refid="WHERE_SQL" />
+
+
+    </select>
+
+    <select id="queryForCount" resultType="java.lang.Integer">
+      select count(*) from employee e
+      <include refid="WHERE_SQL" />
+    </select>
+
+
+    <select id="selectRelation" resultType="cn.wolfcode.crm.domain.Role">
+         select id, name, sn from role JOIN employee_relate_role e ON e.roleId = role.id where employeeId = #{id};
+
+    </select>
+  <select id="loginName" resultType="cn.wolfcode.crm.domain.Employee">
+    select * from employee where name = #{name}
+
+  </select>
+    <select id="listEmployeesByRoleSns" resultType="cn.wolfcode.crm.domain.Employee">
+        SELECT e.id, e.name, e.email, e.age, e.admin, e.deptId
+        FROM employee e
+        LEFT JOIN employee_relate_role ON employee_relate_role.employeeId = e.id
+        LEFT JOIN role ON role.id = roleId
+        WHERE role.sn IN
+        <foreach collection="array" open="(" separator="," close=")" item="sn" >
+          #{sn}
+        </foreach>
+
+    </select>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.crm.mapper.CustomerTraceHistoryMapper" >
+  <resultMap id="BaseResultMap" type="cn.wolfcode.crm.domain.CustomerTraceHistory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="trace_time" property="traceTime" jdbcType="DATE" />
+    <result column="trace_details" property="traceDetails" jdbcType="VARCHAR" />
+    <result column="trace_type_id" property="traceTypeId" jdbcType="BIGINT" />
+    <result column="trace_result" property="traceResult" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="input_user_id" property="inputUserId" jdbcType="BIGINT" />
+    <result column="input_time" property="inputTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+
+    <association property="customer" columnPrefix="c_" javaType="cn.wolfcode.crm.domain.Customer" >
+      <id column="id" property="id" />
+      <result column="name" property="name" />
+    </association>
+    <association property="traceType" columnPrefix="sdi_" javaType="cn.wolfcode.crm.domain.Systemdictionaryitem" >
+      <id column="id" property="id" />
+      <result column="title" property="title" />
+    </association>
+    <association property="inputUser" columnPrefix="e_" javaType="cn.wolfcode.crm.domain.Employee" >
+      <id column="id" property="id" />
+      <result column="name" property="name" />
+    </association>
+
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customertracehistory
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.wolfcode.crm.domain.CustomerTraceHistory" useGeneratedKeys="true" keyProperty="id" >
+    insert into customertracehistory (trace_time, trace_details, trace_type_id, 
+      trace_result, remark, customer_id, 
+      input_user_id, input_time, type
+      )
+    values (#{traceTime,jdbcType=DATE}, #{traceDetails,jdbcType=VARCHAR}, #{traceTypeId,jdbcType=BIGINT}, 
+      #{traceResult,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, 
+      #{inputUserId,jdbcType=BIGINT}, #{inputTime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.crm.domain.CustomerTraceHistory" >
+    update customertracehistory
+    set trace_time = #{traceTime,jdbcType=DATE},
+      trace_details = #{traceDetails,jdbcType=VARCHAR},
+      trace_type_id = #{traceTypeId,jdbcType=BIGINT},
+      trace_result = #{traceResult,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, trace_time, trace_details, trace_type_id, trace_result, remark, customer_id, 
+    input_user_id, input_time, type
+    from customertracehistory
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, trace_time, trace_details, trace_type_id, trace_result, remark, customer_id, 
+    input_user_id, input_time, type
+    from customertracehistory
+  </select>
+    <select id="queryForList" resultMap="BaseResultMap" >
+        select cth.id, cth.trace_time, cth.trace_details, cth.trace_type_id, cth.trace_result, cth.remark, cth.customer_id,
+        cth.input_user_id, cth.input_time, cth.type,
+        c.id c_id,
+        c.name c_name,
+        sdi.id sdi_id,
+        sdi.title sdi_title,
+        e.id e_id,
+        e.name e_name
+        from customertracehistory cth
+        LEFT JOIN  customer c ON cth.customer_id = c.id
+        LEFT JOIN systemdictionaryitem sdi ON sdi.id = cth.trace_type_id
+        LEFT JOIN employee e ON e.id = cth.input_user_id
+    </select>
+</mapper>

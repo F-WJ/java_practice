@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<!--    配置扫描控制器-->
+    <context:component-scan base-package="cn.wolfcode.crm.web.controller" />
+<!--    mvc注解驱动解析器-->
+    <mvc:annotation-driven />
+
+    <context:component-scan base-package="cn.wolfcode.crm.util" />
+
+<!--    配置前缀和后缀-->
+<!--    <bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver"  >-->
+<!--        <property name="prefix" value="/WEB-INF/views/" />-->
+<!--        <property name="suffix" value=".jsp" />-->
+<!--    </bean>-->
+
+    <!--配置freeMarker的模板路径 -->
+    <bean class="cn.wolfcode.crm.util.MyFreeMarkerConfig">
+        <!-- 配置freemarker的文件编码 -->
+        <property name="defaultEncoding" value="UTF-8" />
+        <!-- 配置freemarker寻找模板的路径 -->
+        <property name="templateLoaderPath" value="/WEB-INF/views/" />
+    </bean>
+    <!--freemarker视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <!-- 是否在model自动把session中的attribute导入进去; -->
+        <property name="exposeSessionAttributes" value="true" />
+        <!-- 配置逻辑视图自动添加的后缀名 -->
+        <property name="suffix" value=".ftl" />
+        <!-- 配置视图的输出HTML的contentType -->
+        <property name="contentType" value="text/html;charset=UTF-8" />
+    </bean>
+
+    <!-- 关联applicationcontext文件-->
+    <import resource="classpath:applicationContext.xml" />
+
+    <!--    关联shiro文件-->
+    <import resource="classpath:shiro.xml" />
+
+
+
+<!--    统一处理异常-->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <!-- 定义默认的异常处理页面，当该异常类型的注册时使用 -->
+        <property name="defaultErrorView" value="common/error"/>
+        <!-- 定义异常处理页面用来获取异常信息的变量名，默认名为exception -->
+        <property name="exceptionAttribute" value="ex"/>
+        <!-- 定义需要特殊处理的异常，用类名或完全路径名作为key，异常返回指定页面的名字作为值 -->
+        <property name="exceptionMappings">
+            <value>
+                org.apache.shiro.authz.UnauthorizedException=common/nopermission
+                <!-- 这里还可以继续扩展不同异常类型的异常处理 -->
+            </value>
+        </property>
+    </bean>
+
+<!--    指定当前需要使用的加密算法-->
+    <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher" >
+        <property name="hashAlgorithmName" value="MD5" />
+    </bean>
+
+
+<!--    文件上传配置-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="#{1024*1024*10}" />
+    </bean>
+
+
+
+
+
+
+<!--    &lt;!&ndash; 配置拦截器 &ndash;&gt;-->
+<!--    <mvc:interceptors>-->
+<!--&lt;!&ndash;        登录拦截器&ndash;&gt;-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash; 拦截名单 &ndash;&gt;-->
+<!--            <mvc:mapping path="/**"/>-->
+<!--            &lt;!&ndash; 免拦截名单 &ndash;&gt;-->
+<!--            <mvc:exclude-mapping path="/login.do"/>-->
+<!--            &lt;!&ndash; 实现这个拦截的类名 &ndash;&gt;-->
+<!--            <bean class="cn.wolfcode.crm.web.interceptor.LoginInterceptor" />-->
+<!--        </mvc:interceptor>-->
+
+<!--&lt;!&ndash;        操作拦截器&ndash;&gt;-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/**/"/>-->
+<!--            <mvc:exclude-mapping path="/login.do"/>-->
+<!--            <bean class="cn.wolfcode.crm.web.interceptor.PermissionInterceptor" />-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+
+</beans>

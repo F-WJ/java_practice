@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.crm.mapper.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="cn.wolfcode.crm.domain.Customer" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="job_id" property="job_id" jdbcType="BIGINT" />
+    <result column="source_id" property="source_id" jdbcType="BIGINT" />
+    <result column="seller_id" property="seller_id" jdbcType="BIGINT" />
+    <result column="inputUser_id" property="inputUser_id" jdbcType="BIGINT" />
+    <result column="input_time" property="input_time" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from customer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.wolfcode.crm.domain.Customer" useGeneratedKeys="true" keyProperty="id" >
+    insert into customer (name, age, gender, 
+      tel, qq, job_id, source_id, 
+      seller_id, inputUser_id, input_time, 
+      status)
+    values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER}, 
+      #{tel,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{job_id,jdbcType=BIGINT}, #{source_id,jdbcType=BIGINT}, 
+      #{seller_id,jdbcType=BIGINT}, #{inputUser_id,jdbcType=BIGINT}, #{input_time,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.wolfcode.crm.domain.Customer" >
+    update customer
+    set name = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      gender = #{gender,jdbcType=INTEGER},
+      tel = #{tel,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      job_id = #{job_id,jdbcType=BIGINT},
+      source_id = #{source_id,jdbcType=BIGINT},
+      seller_id = #{seller_id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateCustomerStatus">
+    update customer set status = #{status} where id = #{customerId}
+  </update>
+    <update id="updateSellerById">
+        update customer set seller_id = #{sellerId}, status = 0 where id = #{customerId}
+
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, age, gender, tel, qq, job_id, source_id, seller_id, inputUser_id, 
+    input_time, status
+    from customer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, age, gender, tel, qq, job_id, source_id, seller_id, inputUser_id, 
+    input_time, status
+    from customer
+  </select>
+
+    <resultMap id="ResultMap" type="cn.wolfcode.crm.domain.Customer" >
+      <id column="c_id" property="id" />
+      <result column="c_name" property="name" />
+      <result column="c_age" property="age" />
+      <result column="gender" property="gender" />
+      <result column="tel" property="tel" />
+      <result column="qq" property="qq" jdbcType="VARCHAR" />
+      <result column="job_id" property="job_id" jdbcType="BIGINT" />
+      <result column="source_id" property="source_id" jdbcType="BIGINT" />
+      <result column="seller_id" property="seller_id" jdbcType="BIGINT" />
+      <result column="inputUser_id" property="inputUser_id" jdbcType="BIGINT" />
+      <result column="input_time" property="input_time" jdbcType="TIMESTAMP" />
+      <result column="status" property="status" jdbcType="INTEGER" />
+      <association property="source" columnPrefix="source_" javaType="cn.wolfcode.crm.domain.Systemdictionaryitem" >
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+      </association>
+      <association property="job" columnPrefix="job_" javaType="cn.wolfcode.crm.domain.Systemdictionaryitem" >
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+      </association>
+      <association property="seller"  columnPrefix="seller_" javaType="cn.wolfcode.crm.domain.Employee" >
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+      </association>
+
+    </resultMap>
+
+    <select id="queryForList" resultMap="ResultMap">
+        SELECT c.id c_id , c.name c_name, c.age c_age, gender, tel, qq, job_id, source_id, seller_id, inputUser_id, input_time, status,
+        sm1.title AS job_title,
+        sm2.title AS source_title,
+        e.name AS seller_name
+        FROM customer c
+        LEFT JOIN systemdictionaryitem sm1 ON sm1.id = job_id
+        LEFT JOIN systemdictionaryitem sm2 ON sm2.id = source_id
+        LEFT JOIN employee e ON e.id = seller_id
+        <where>
+        <if test="sellerId != -1" >
+          AND seller_id = #{sellerId}
+        </if>
+        <if test="status != -1">
+          AND status = #{status}
+        </if>
+          <if test="keyword != null and keyword != '' ">
+            and (c.name like concat('%', #{keyword}, '%') or tel like concat('%', #{keyword}, '%'))
+          </if>
+        </where>
+    </select>
+</mapper>
